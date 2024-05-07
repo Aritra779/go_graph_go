@@ -2,7 +2,7 @@ package go_graph_go
 
 type Node struct {
 	id        string
-	Neighbors []*Node
+	Neighbors map[string]*Node
 }
 
 type Graph struct {
@@ -15,9 +15,13 @@ func NewGraph() *Graph {
 	}
 }
 
-func (node *Node) AddNeighbor(neighborNode *Node) {}
+func (node *Node) AddNeighbor(neighborNode *Node) {
+	node.Neighbors[neighborNode.id] = neighborNode
+}
 
-func (node *Node) RemoveNeighbor(neighborNode *Node) {}
+func (node *Node) RemoveNeighbor(neighborNode *Node) {
+	node.Neighbors[neighborNode.id] = nil
+}
 
 func (graph *Graph) AddNode(node *Node) {}
 
