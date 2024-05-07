@@ -4,11 +4,6 @@ import (
 	"errors"
 )
 
-type Node struct {
-	id        string
-	Neighbors map[string]*Node
-}
-
 type Graph struct {
 	Nodes map[string]*Node
 }
@@ -18,21 +13,6 @@ func NewGraph() *Graph {
 	return &Graph{
 		Nodes: make(map[string]*Node),
 	}
-}
-
-// Adds a neighbor to the node
-func (node *Node) addNeighbor(neighborNode *Node) {
-	node.Neighbors[neighborNode.id] = neighborNode
-}
-
-// removes a neighbor from a node
-func (node *Node) removeNeighbor(neighborNode *Node) {
-	delete(node.Neighbors, neighborNode.id)
-}
-
-func (node *Node) isNeighbor(neighborNodeId string) bool {
-	_, ok := node.Neighbors[neighborNodeId]
-	return ok
 }
 
 // Adds A Node with No Neighbors
