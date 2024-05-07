@@ -53,6 +53,20 @@ func (graph *Graph) RemoveNode(node *Node) error {
 	return nil
 }
 
-func (graph *Graph) AddEdge(node1Id, node2Id string) {}
+// Adds an Edge between the two provided nodes
+func (graph *Graph) AddEdge(node1Id, node2Id string) {
+	node1 := graph.Nodes[node1Id]
+	node2 := graph.Nodes[node2Id]
 
-func (graph *Graph) RemoveEdge(node1Id, node2Id string) {}
+	node1.Neighbors[node2Id] = node2
+	node2.Neighbors[node1Id] = node1
+}
+
+// Removes an Edge between two provided nodes
+func (graph *Graph) RemoveEdge(node1Id, node2Id string) {
+	node1 := graph.Nodes[node1Id]
+	node2 := graph.Nodes[node2Id]
+
+	delete(node1.Neighbors, node2.id)
+	delete(node2.Neighbors, node1.id)
+}
