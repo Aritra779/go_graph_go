@@ -1,4 +1,4 @@
-package go_graph_go
+package graph
 
 import (
 	"errors"
@@ -28,6 +28,11 @@ func (node *Node) addNeighbor(neighborNode *Node) {
 // removes a neighbor from a node
 func (node *Node) removeNeighbor(neighborNode *Node) {
 	delete(node.Neighbors, neighborNode.id)
+}
+
+func (node *Node) isNeighbor(neighborNodeId string) bool {
+	_, ok := node.Neighbors[neighborNodeId]
+	return ok
 }
 
 // Adds A Node with No Neighbors
@@ -71,4 +76,8 @@ func (graph *Graph) RemoveEdge(node1Id, node2Id string) {
 
 	node1.removeNeighbor(node2)
 	node2.removeNeighbor(node1)
+}
+
+func (graph *Graph) AreNodesAdjacent(node1Id, node2Id string) bool {
+	return graph.Nodes[node1Id].isNeighbor(node2Id)
 }
