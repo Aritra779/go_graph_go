@@ -19,12 +19,12 @@ func NewGraph() *Graph {
 }
 
 // Adds a neighbor to the node
-func (node *Node) AddNeighbor(neighborNode *Node) {
+func (node *Node) addNeighbor(neighborNode *Node) {
 	node.Neighbors[neighborNode.id] = neighborNode
 }
 
 // removes a neighbor from a node
-func (node *Node) RemoveNeighbor(neighborNode *Node) {
+func (node *Node) removeNeighbor(neighborNode *Node) {
 	delete(node.Neighbors, neighborNode.id)
 }
 
@@ -47,7 +47,7 @@ func (graph *Graph) RemoveNode(node *Node) error {
 		return errors.New("trying to delete a non existing Node")
 	}
 	for _, neighbor := range graph.Nodes[node.id].Neighbors {
-		neighbor.RemoveNeighbor(node)
+		neighbor.removeNeighbor(node)
 	}
 	delete(graph.Nodes, node.id)
 	return nil
@@ -58,8 +58,8 @@ func (graph *Graph) AddEdge(node1Id, node2Id string) {
 	node1 := graph.Nodes[node1Id]
 	node2 := graph.Nodes[node2Id]
 
-	node1.Neighbors[node2Id] = node2
-	node2.Neighbors[node1Id] = node1
+	node1.addNeighbor(node1)
+	node2.addNeighbor(node2)
 }
 
 // Removes an Edge between two provided nodes
@@ -67,6 +67,6 @@ func (graph *Graph) RemoveEdge(node1Id, node2Id string) {
 	node1 := graph.Nodes[node1Id]
 	node2 := graph.Nodes[node2Id]
 
-	delete(node1.Neighbors, node2.id)
-	delete(node2.Neighbors, node1.id)
+	node1.removeNeighbor(node2)
+	node2.removeNeighbor(node1)
 }
