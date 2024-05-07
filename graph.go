@@ -1,6 +1,8 @@
 package go_graph_go
 
-import "errors"
+import (
+	"errors"
+)
 
 type Node struct {
 	id        string
@@ -29,10 +31,10 @@ func (node *Node) removeNeighbor(neighborNode *Node) {
 }
 
 // Adds A Node with No Neighbors
-func (graph *Graph) AddNode(node *Node) error {
-	if _, exists := graph.Nodes[node.id]; !exists {
+func (graph *Graph) AddNode(nodeId string) error {
+	if _, exists := graph.Nodes[nodeId]; !exists {
 		newNode := &Node{
-			id:        node.id,
+			id:        nodeId,
 			Neighbors: make(map[string]*Node),
 		}
 		graph.Nodes[newNode.id] = newNode
@@ -58,8 +60,8 @@ func (graph *Graph) AddEdge(node1Id, node2Id string) {
 	node1 := graph.Nodes[node1Id]
 	node2 := graph.Nodes[node2Id]
 
-	node1.addNeighbor(node1)
-	node2.addNeighbor(node2)
+	node1.addNeighbor(node2)
+	node2.addNeighbor(node1)
 }
 
 // Removes an Edge between two provided nodes
