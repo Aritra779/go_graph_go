@@ -2,6 +2,7 @@ package graph
 
 type Node struct {
 	id        string
+	data      struct{}
 	Neighbors map[string]*Node
 }
 

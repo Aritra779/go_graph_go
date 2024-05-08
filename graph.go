@@ -12,10 +12,11 @@ func NewGraph() *Graph {
 }
 
 // Adds A Node with No Neighbors
-func (graph *Graph) AddNode(nodeId string) error {
+func (graph *Graph) AddNode(nodeId string, nodeData struct{}) error {
 	if _, exists := graph.Nodes[nodeId]; !exists {
 		newNode := &Node{
 			id:        nodeId,
+			data:      nodeData,
 			Neighbors: make(map[string]*Node),
 		}
 		graph.Nodes[newNode.id] = newNode
