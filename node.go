@@ -1,10 +1,5 @@
 package graph
 
-type Node struct {
-	id        string
-	Neighbors map[string]*Node
-}
-
 // Adds a neighbor to the node
 func (node *Node) addNeighbor(neighborNode *Node) {
 	node.Neighbors[neighborNode.id] = neighborNode

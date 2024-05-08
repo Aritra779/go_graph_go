@@ -4,10 +4,6 @@ import (
 	"errors"
 )
 
-type Graph struct {
-	Nodes map[string]*Node
-}
-
 // Creates a new Graph
 func NewGraph() *Graph {
 	return &Graph{
