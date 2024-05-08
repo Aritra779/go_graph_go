@@ -39,22 +39,37 @@ func (graph *Graph) RemoveNode(node *Node) error {
 
 // Adds an Edge between the two provided nodes
 func (graph *Graph) AddEdge(node1Id, node2Id string) {
-	node1 := graph.Nodes[node1Id]
-	node2 := graph.Nodes[node2Id]
+	node1, node1Exists := graph.Nodes[node1Id]
+	node2, node2Exists := graph.Nodes[node2Id]
 
-	node1.addNeighbor(node2)
-	node2.addNeighbor(node1)
+	if node1Exists && node2Exists {
+		node1.addNeighbor(node2)
+		node2.addNeighbor(node1)
+	}
 }
 
 // Removes an Edge between two provided nodes
 func (graph *Graph) RemoveEdge(node1Id, node2Id string) {
-	node1 := graph.Nodes[node1Id]
-	node2 := graph.Nodes[node2Id]
+	node1, node1Exists := graph.Nodes[node1Id]
+	node2, node2Exists := graph.Nodes[node2Id]
 
-	node1.removeNeighbor(node2)
-	node2.removeNeighbor(node1)
+	if node1Exists && node2Exists {
+		node1.removeNeighbor(node2)
+		node2.removeNeighbor(node1)
+	}
 }
 
 func (graph *Graph) AreNodesAdjacent(node1Id, node2Id string) bool {
-	return graph.Nodes[node1Id].isNeighbor(node2Id)
+	node1, node1Exists := graph.Nodes[node1Id]
+
+	if !node1Exists {
+		return false
+	}
+
+	_, node2Exists := graph.Nodes[node2Id]
+	if !node2Exists {
+		return false
+	}
+
+	return node1.isNeighbor(node2Id)
 }
