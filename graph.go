@@ -15,11 +15,11 @@ func NewGraph() *Graph {
 func (graph *Graph) AddNode(nodeId string, nodeData any) error {
 	if _, exists := graph.Nodes[nodeId]; !exists {
 		newNode := &Node{
-			id:        nodeId,
-			data:      nodeData,
+			Id:        nodeId,
+			Data:      nodeData,
 			Neighbors: make(map[string]*Node),
 		}
-		graph.Nodes[newNode.id] = newNode
+		graph.Nodes[newNode.Id] = newNode
 		return nil
 	}
 	return errors.New("node Already Exists in the graph")
@@ -27,13 +27,13 @@ func (graph *Graph) AddNode(nodeId string, nodeData any) error {
 
 // Removes a node from the graph along with all the connected edges
 func (graph *Graph) RemoveNode(node *Node) error {
-	if _, exists := graph.Nodes[node.id]; !exists {
+	if _, exists := graph.Nodes[node.Id]; !exists {
 		return errors.New("trying to delete a non existing Node")
 	}
-	for _, neighbor := range graph.Nodes[node.id].Neighbors {
+	for _, neighbor := range graph.Nodes[node.Id].Neighbors {
 		neighbor.removeNeighbor(node)
 	}
-	delete(graph.Nodes, node.id)
+	delete(graph.Nodes, node.Id)
 	return nil
 }
 

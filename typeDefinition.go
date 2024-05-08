@@ -1,8 +1,8 @@
 package graph
 
 type Node struct {
-	id        string
-	data      any
+	Id        string
+	Data      any
 	Neighbors map[string]*Node
 }
 
