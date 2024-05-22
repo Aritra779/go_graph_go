@@ -14,3 +14,7 @@ func (node *Node) isNeighbor(neighborNodeId string) bool {
 	_, ok := node.Neighbors[neighborNodeId]
 	return ok
 }
+
+func (node *Node) updateData(newData any) {
+	node.Data = newData
+}

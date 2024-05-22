@@ -43,8 +43,12 @@ func (graph *Graph) AddEdge(node1Id, node2Id string) {
 	node2, node2Exists := graph.Nodes[node2Id]
 
 	if node1Exists && node2Exists {
-		node1.addNeighbor(node2)
-		node2.addNeighbor(node1)
+		if !node1.isNeighbor(node2Id) {
+			node1.addNeighbor(node2)
+		}
+		if !node2.isNeighbor(node1Id) {
+			node2.addNeighbor(node1)
+		}
 	}
 }
 
@@ -54,8 +58,12 @@ func (graph *Graph) RemoveEdge(node1Id, node2Id string) {
 	node2, node2Exists := graph.Nodes[node2Id]
 
 	if node1Exists && node2Exists {
-		node1.removeNeighbor(node2)
-		node2.removeNeighbor(node1)
+		if node1.isNeighbor(node2Id) {
+			node1.removeNeighbor(node2)
+		}
+		if node1.isNeighbor(node2Id) {
+			node2.removeNeighbor(node1)
+		}
 	}
 }
 
@@ -72,4 +80,12 @@ func (graph *Graph) AreNodesAdjacent(node1Id, node2Id string) bool {
 	}
 
 	return node1.isNeighbor(node2Id)
+}
+
+func (graph *Graph) UpdateNodeData(nodeId *string, newData any) {
+	node1, exists := graph.Nodes[*nodeId]
+	if !exists {
+		return
+	}
+	node1.updateData(newData)
 }
