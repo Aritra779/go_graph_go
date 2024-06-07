@@ -14,7 +14,7 @@ func (node *Node) removeNeighbor(neighborNode *Node) {
 	delete(node.Neighbors, neighborNode.Id)
 }
 
-func (node *Node) getNeighbor(neighborNodeId *string) (*Node, bool) {
+func (node *Node) GetNeighbor(neighborNodeId *string) (*Node, bool) {
 	node.NeighborMutex.RLock()
 	defer node.NeighborMutex.RUnlock()
 	neighborNode, ok := node.Neighbors[*neighborNodeId]
@@ -22,7 +22,7 @@ func (node *Node) getNeighbor(neighborNodeId *string) (*Node, bool) {
 }
 
 func (node *Node) isNeighbor(neighborNodeId string) bool {
-	_, ok := node.getNeighbor(&neighborNodeId)
+	_, ok := node.GetNeighbor(&neighborNodeId)
 	return ok
 }
 

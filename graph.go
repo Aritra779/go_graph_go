@@ -105,3 +105,13 @@ func (graph *Graph) UpdateNodeData(nodeId *string, newData any) {
 	}
 	node1.updateData(newData)
 }
+
+func (graph *Graph) GetEdges(nodeId *string) (map[string]*Node, bool) {
+	graph.mutex.RLock()
+	defer graph.mutex.RUnlock()
+	node, ok := graph.GetNode(*nodeId)
+	if !ok {
+		return map[string]*Node{}, false
+	}
+	return node.Neighbors, true
+}
