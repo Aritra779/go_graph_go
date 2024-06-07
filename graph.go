@@ -44,12 +44,17 @@ func (graph *Graph) RemoveNode(node *Node) error {
 	return nil
 }
 
-// Adds an Edge between the two provided nodes
-func (graph *Graph) AddEdge(node1Id, node2Id string) {
+func (graph *Graph) GetNode(nodeId string) (*Node, bool) {
 	graph.mutex.RLock()
 	defer graph.mutex.RUnlock()
-	node1, node1Exists := graph.Nodes[node1Id]
-	node2, node2Exists := graph.Nodes[node2Id]
+	node, ok := graph.Nodes[nodeId]
+	return node, ok
+}
+
+// Adds an Edge between the two provided nodes
+func (graph *Graph) AddEdge(node1Id, node2Id string) {
+	node1, node1Exists := graph.GetNode(node1Id)
+	node2, node2Exists := graph.GetNode(node2Id)
 
 	if node1Exists && node2Exists {
 		if !node1.isNeighbor(node2Id) {
@@ -63,10 +68,8 @@ func (graph *Graph) AddEdge(node1Id, node2Id string) {
 
 // Removes an Edge between two provided nodes
 func (graph *Graph) RemoveEdge(node1Id, node2Id string) {
-	graph.mutex.RLock()
-	defer graph.mutex.RUnlock()
-	node1, node1Exists := graph.Nodes[node1Id]
-	node2, node2Exists := graph.Nodes[node2Id]
+	node1, node1Exists := graph.GetNode(node1Id)
+	node2, node2Exists := graph.GetNode(node2Id)
 
 	if node1Exists && node2Exists {
 		if node1.isNeighbor(node2Id) {
@@ -79,15 +82,13 @@ func (graph *Graph) RemoveEdge(node1Id, node2Id string) {
 }
 
 func (graph *Graph) AreNodesAdjacent(node1Id, node2Id string) bool {
-	graph.mutex.RLock()
-	defer graph.mutex.RUnlock()
-	node1, node1Exists := graph.Nodes[node1Id]
+	node1, node1Exists := graph.GetNode(node1Id)
 
 	if !node1Exists {
 		return false
 	}
 
-	_, node2Exists := graph.Nodes[node2Id]
+	_, node2Exists := graph.GetNode(node2Id)
 	if !node2Exists {
 		return false
 	}

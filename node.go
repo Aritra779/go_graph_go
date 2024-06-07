@@ -14,10 +14,15 @@ func (node *Node) removeNeighbor(neighborNode *Node) {
 	delete(node.Neighbors, neighborNode.Id)
 }
 
-func (node *Node) isNeighbor(neighborNodeId string) bool {
+func (node *Node) getNeighbor(neighborNodeId *string) (*Node, bool) {
 	node.NeighborMutex.RLock()
 	defer node.NeighborMutex.RUnlock()
-	_, ok := node.Neighbors[neighborNodeId]
+	neighborNode, ok := node.Neighbors[*neighborNodeId]
+	return neighborNode, ok
+}
+
+func (node *Node) isNeighbor(neighborNodeId string) bool {
+	_, ok := node.getNeighbor(&neighborNodeId)
 	return ok
 }
 
