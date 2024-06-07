@@ -2,22 +2,27 @@ package graph
 
 import (
 	"errors"
+	"sync"
 )
 
 // Creates a new Graph
 func NewGraph() *Graph {
 	return &Graph{
 		Nodes: make(map[string]*Node),
+		mutex: sync.RWMutex{},
 	}
 }
 
 // Adds A Node with No Neighbors
 func (graph *Graph) AddNode(nodeId string, nodeData any) error {
+	graph.mutex.Lock()
+	defer graph.mutex.Unlock()
 	if _, exists := graph.Nodes[nodeId]; !exists {
 		newNode := &Node{
-			Id:        nodeId,
-			Data:      nodeData,
-			Neighbors: make(map[string]*Node),
+			Id:            nodeId,
+			Data:          nodeData,
+			Neighbors:     make(map[string]*Node),
+			NeighborMutex: sync.RWMutex{},
 		}
 		graph.Nodes[newNode.Id] = newNode
 		return nil
@@ -27,6 +32,8 @@ func (graph *Graph) AddNode(nodeId string, nodeData any) error {
 
 // Removes a node from the graph along with all the connected edges
 func (graph *Graph) RemoveNode(node *Node) error {
+	graph.mutex.Lock()
+	defer graph.mutex.Unlock()
 	if _, exists := graph.Nodes[node.Id]; !exists {
 		return errors.New("trying to delete a non existing Node")
 	}
@@ -39,6 +46,8 @@ func (graph *Graph) RemoveNode(node *Node) error {
 
 // Adds an Edge between the two provided nodes
 func (graph *Graph) AddEdge(node1Id, node2Id string) {
+	graph.mutex.RLock()
+	defer graph.mutex.RUnlock()
 	node1, node1Exists := graph.Nodes[node1Id]
 	node2, node2Exists := graph.Nodes[node2Id]
 
@@ -54,6 +63,8 @@ func (graph *Graph) AddEdge(node1Id, node2Id string) {
 
 // Removes an Edge between two provided nodes
 func (graph *Graph) RemoveEdge(node1Id, node2Id string) {
+	graph.mutex.RLock()
+	defer graph.mutex.RUnlock()
 	node1, node1Exists := graph.Nodes[node1Id]
 	node2, node2Exists := graph.Nodes[node2Id]
 
@@ -68,6 +79,8 @@ func (graph *Graph) RemoveEdge(node1Id, node2Id string) {
 }
 
 func (graph *Graph) AreNodesAdjacent(node1Id, node2Id string) bool {
+	graph.mutex.RLock()
+	defer graph.mutex.RUnlock()
 	node1, node1Exists := graph.Nodes[node1Id]
 
 	if !node1Exists {
@@ -83,6 +96,8 @@ func (graph *Graph) AreNodesAdjacent(node1Id, node2Id string) bool {
 }
 
 func (graph *Graph) UpdateNodeData(nodeId *string, newData any) {
+	graph.mutex.RLock()
+	defer graph.mutex.RUnlock()
 	node1, exists := graph.Nodes[*nodeId]
 	if !exists {
 		return
